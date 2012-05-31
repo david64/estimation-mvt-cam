@@ -1,0 +1,32 @@
+This file contains the corresponding translations for all variables :
+
+ETUDE_STAT STAT_STUDY
+calc_DFtheta comp_DFtheta
+taille size
+	t.h s.h
+	t.l t.w
+MARGE MARGIN
+interp_pixeli int_px_interp
+interp_pixel px_interp
+calc_grad comp_grad
+calc_utheta comp_utheta
+conversion_params params_conversion
+critere_arret stop_criterion
+calc_camera_pos comp_cam_position
+matrice.lignes matrix.rows
+matrice.colonnes matrix.columns
+pos.centre.taille pos.center.size
+pos.centre.v[{0,1,2}] pos.center.v[{0,1,2}]
+pos.{i,j,k].taille pos.{i,j,k}.taille
+vecteur.taille vector.size
+produit_mm product_mm
+produit_mv product_mv
+somme_vv sum_vv
+mvt_cam_matlab octave_cam_motion
+MVT_CAM_H CAM_MOTION_H
+mat_forme_q mat_quad_form
+vect_forme_lin vect_lin_form
+calc_deltatheta comp_deltatheta
+res_tri_sup res_upper_tri
+res_tri_inf res_lower_tri
+
