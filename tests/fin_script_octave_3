@@ -1,0 +1,9 @@
+
+% Vecteur colonne du nombre d'itérations
+N=length(A(:,1));
+iterations=[1:N]';
+
+% Tracé
+plot(iterations(50:end), A(50:end,2), '*-');
+title('Increments de alpha');
+
