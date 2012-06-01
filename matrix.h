@@ -1,59 +1,57 @@
 
-/* matrices.h */
-/* Quelques fonctions de manipulation de matrices */
-/* Les matrices sont supposées petites (nous utiliserons des
-matrices de taille 7x7) de telle sorte que nous n'avons pas
-besoin d'allouer la mémoire dynamiquement */
+/* matrix.h */
+// Some matrix manipulation functions
+// Those matrix are little (7x7) and are not dynamically allocated
 
 
 #ifndef MATRICES
 #define MATRICES
 
 
-#define MAT_TAILLE 10
+#define MAT_SIZE 10
 
-/* Une matrice */
+/* A matrix */
 typedef struct {
-	double m[MAT_TAILLE][MAT_TAILLE];
-	int lignes;
-	int colonnes;
+	double m[MAT_SIZE][MAT_SIZE];
+	int rows;
+	int columns;
 } mat;
 
-/* Un vecteur */
+/* A vector */
 typedef struct {
-	double v[MAT_TAILLE];
-	int taille;
+	double v[MAT_SIZE];
+	int size;
 } vect;
 
-/* Somme des produits des coefficients des colonnes a et b */
-double somme_p(mat M, int a, int b);
+// Sum of the a_{i}b_{i} where a=(a_i) and b=(b_i) are columns
+double sum_p(mat M, int a, int b);
 
-/* Renvoie la matrice de Cholesky d'une matrice symétrique définie positive */
+// Cholesky matrix of a symmetric positive-definite matrix
 mat cholesky(mat M);
 
-/* Affiche une matrice */
+// Print a matrix
 void print_mat(mat M);
 
-/* Transpose une matrice */
+// Transpose a matrix
 mat transpose(mat M);
 
-/* Produit de deux matrices (algorithme naïf) */
-mat produit_mm(mat A, mat B);
+// Naive product of two matrices
+mat product_mm(mat A, mat B);
 
-/* Produit d'une matrice par un vecteur */
-vect produit_mv(mat A, vect X);
+// Product of a matrix by a vector
+vect product_mv(mat A, vect X);
 
-/* Résoud PX = B avec P triangulaire supérieure */
-vect res_tri_sup(mat P, vect B);
+// Solve PX = B with P upper triangulary
+vect res_upper_tri(mat P, vect B);
 
-/* Résoud PX = B avec P triangulaire inférieure */
-vect res_tri_inf(mat P, vect B);
+// Solve PX = B with P lower triangulary
+vect res_lower_tri(mat P, vect B);
 
-/* Résoud MX = Y par pivot de gauss. M est supposée carrée de même taille que Y et le système obtenu inversible */
+// Solve MX = Y by Gauss elimination. We expect M to be a square matrix, Y a column of the same size and the system invertible 
 vect gauss(mat A, vect U);
 
-// addition de deux vecteurs
-vect somme_vv(vect u, vect v);
+// Sum of two vectors
+vect sum_vv(vect u, vect v);
 
 #endif
 

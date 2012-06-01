@@ -1,38 +1,39 @@
 
-/* simul_mvt.h */
+/* motion_simulation.h */
 
 #ifndef SIMUL
 #define SIMUL
 
 #include <stdlib.h>
-#include "matrices.h"
+#include "matrix.h"
 
 #define fc 100
 
-// Paramètres de mouvement de camÃ©ra
+// Camera motion parameters
 typedef struct
 {
 	double gamma, alpha, beta, A, B, C;
-} params; // Même structure que dans params_mvt.h !
+} params; // Same structure in motion_params.h !
 
 typedef struct {
 
-	int h,l;
-} taille;
+	int h,w;
+} size;
 
-// Donne la taille d'une image
-taille taille_image(char* file);
+// Size of an image
+size image_size(char* file);
 
-// Charger une image
-void charger_image(int** f, char* fichier);
+// Load an image
+void load_image(int** f, char* file);
 
-// Revenir Ã  (a1, â€¦)
-vect conversion_params_inverse(params p);
+// Convert parameters (theta,alpha,beta,A,B,C) into (a1,a2,c1,c2,q1,q2)
+vect reverse_params_conversion(params p);
 
-// Enregistrer l'image modifiée
-void enregistrer_image(int** f, char* filename, taille t);
+// Save an image
+void save_image(int** f, char* filename, size s);
 
-// Simuler le mouvement
-void simul_mvt(char* fichier, char* out, params p);
+// Motion simulation
+void motion_simulation(char* file, char* out, params p);
 
 #endif
+

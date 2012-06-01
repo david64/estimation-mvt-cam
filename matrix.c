@@ -1,32 +1,32 @@
 
-/* matrices.c */
-/* Quelques fonctions de manipulation de matrices */
+/* matrix.c */
+/* Some matrix manipulation functions */
 
 #include <math.h>
 #include <stdio.h>
 
-#include "matrices.h"
+#include "matrix.h"
 
-double somme_p(mat M, int a, int b) {
+double sum_p(mat M, int a, int b) {
 
 	double r = 0.0;
 	int k;
-	for(k=0; k<M.lignes; k++)
+	for(k=0; k<M.rows; k++)
 		r = r + M.m[k][a]*M.m[k][b];
 	return r;
 }
 
-/* Matrice de cholesky d'une matrice symétrique définie positive */
+/* Cholesky matrix of a symmetric positive-definite matrix */
 mat cholesky(mat M) {
 
 	mat L;
 	
-	if(M.lignes != M.colonnes)
+	if(M.rows != M.columns)
 		return L;
 
-	int n = M.lignes;
-	L.lignes = n;
-	L.colonnes = n;
+	int n = M.rows;
+	L.rows = n;
+	L.columns = n;
 
 	int i,j;
 
@@ -36,60 +36,60 @@ mat cholesky(mat M) {
 	}
 
 	for(i=0;i<n;i++){
-		L.m[i][i] = sqrt(M.m[i][i] - somme_p(L, i, i));
+		L.m[i][i] = sqrt(M.m[i][i] - sum_p(L, i, i));
 		for(j=i+1;j<n;j++)
-			L.m[i][j] = (M.m[i][j] - somme_p(L, j, i))/L.m[i][i];
+			L.m[i][j] = (M.m[i][j] - sum_p(L, j, i))/L.m[i][i];
 	}
 	return L;
 }
 
-/* Affiche une matrice */
+/* Print a matrix */
 void print_mat(mat M){
 
 	printf("\n");
 
 	int i,j;
-	for(i=0;i<M.lignes;i++) {
-		for(j=0;j<M.colonnes;j++) {
+	for(i=0;i<M.rows;i++) {
+		for(j=0;j<M.columns;j++) {
 			printf("%e ",M.m[i][j]);
 		}
 		printf("\n");
 	}
 }
 
-/* Transpose une matrice */
+/* Transpose a matrix */
 mat transpose(mat M) {
 
 	mat T;
-	T.lignes = M.colonnes;
-	T.colonnes = M.lignes;
+	T.rows = M.columns;
+	T.columns = M.rows;
 
 	int i,j;
-	for(i=0;i<M.lignes;i++) {
-		for(j=0;j<M.colonnes;j++){
+	for(i=0;i<M.rows;i++) {
+		for(j=0;j<M.columns;j++){
 			T.m[i][j] = M.m[j][i];
 		}
 	}
 	return T;
 }
 
-/* Produit de deux matrices (naïf) */
-mat produit_mm(mat A, mat B){
+/* Naive product of two matrices */
+mat product_mm(mat A, mat B){
 
 	mat M;
 
-	if(A.colonnes != B.lignes)
+	if(A.columns != B.rows)
 		return M;
 	
-	M.lignes = A.lignes;
-	M.colonnes = B.colonnes;
+	M.rows = A.rows;
+	M.columns = B.columns;
 	
 	int i,j,k;
 
-	for(i=0;i<A.lignes;i++){
-		for(j=0;j<B.colonnes;j++){
+	for(i=0;i<A.rows;i++){
+		for(j=0;j<B.columns;j++){
 			M.m[i][j] = 0.0;
-			for(k=0;k<A.colonnes;k++)
+			for(k=0;k<A.columns;k++)
 				M.m[i][j] = M.m[i][j] + A.m[i][k]*B.m[k][j];
 		}
 	}
@@ -97,41 +97,41 @@ mat produit_mm(mat A, mat B){
 	return M;
 }
 
-/* Produit d'une matrice par un vecteur */
-vect produit_mv(mat A, vect X) {
+/* Product of a matrix by a vector */
+vect product_mv(mat A, vect X) {
 
 	vect Y;
 
-	if(A.colonnes != X.taille)
+	if(A.columns != X.size)
 		return Y;
 	
-	Y.taille = A.lignes;
+	Y.size = A.rows;
 
 	int i,k;
-	for(k=0;k<A.lignes;k++) {
+	for(k=0;k<A.rows;k++) {
 		Y.v[k] = 0.0;
-		for(i=0;i<A.colonnes;i++)
+		for(i=0;i<A.columns;i++)
 			Y.v[k] = Y.v[k] + A.m[k][i]*X.v[i];		
 	}
 	
 	return Y;
 }
 
-/* Résoud PX = B où P est triangulaire supérieure */
-vect res_tri_sup(mat P, vect B) {
+/* Solve PX = B where P is upper triangulary */
+vect res_upper_tri(mat P, vect B) {
 
 	vect X;
 	
-	if(P.lignes != B.taille || P.lignes != P.colonnes)
+	if(P.rows != B.size || P.rows != P.columns)
 		return X;
 
 	int i,k;
 	
-	X.taille = P.lignes;
+	X.size = P.rows;
 
-	for(i=B.taille-1;i>=0;i--) {
+	for(i=B.size-1;i>=0;i--) {
 		double s = 0.0;
-		for(k=i+1;k<B.taille;k++)
+		for(k=i+1;k<B.size;k++)
 			s = s + P.m[i][k] * X.v[k];
 		X.v[i] = (B.v[i]-s)/P.m[i][i];	
 	}
@@ -139,19 +139,19 @@ vect res_tri_sup(mat P, vect B) {
 	return X;
 }
 
-/* Résoud PX = B où P est triangulaire inférieure */
-vect res_tri_inf(mat P, vect B) {
+/* Solve PX = B where P is lower triangulary */
+vect res_lower_tri(mat P, vect B) {
 
 	vect X;
 	
-	if(P.lignes != B.taille || P.lignes != P.colonnes)
+	if(P.rows != B.size || P.rows != P.columns)
 		return X;
 
 	int i,k;
 	
-	X.taille = P.lignes;
+	X.size = P.rows;
 	
-	for(i=0;i<B.taille;i++) {
+	for(i=0;i<B.size;i++) {
 		double s = 0.0;
 		for(k=0;k<i;k++)
 			s = s + P.m[i][k] * X.v[k];
@@ -161,15 +161,15 @@ vect res_tri_inf(mat P, vect B) {
 	return X;
 }
 
-/* Résoud le système supposé inversible MX = Y par pivot de Gauss */
+/* Solve the expected invertible system MX = Y by Gaussian elimination */
 vect gauss(mat M, vect Y) {
 
-	int n = Y.taille;
+	int n = Y.size;
 	int k,i,j;
 	
 	for(k=0;k<n-1;k++){
 		
-		// Recherche d'un pivot l
+		// Find pivot l
 	 	int l=k;
 		double max = fabs(M.m[k][k]);
 	
@@ -181,7 +181,7 @@ vect gauss(mat M, vect Y) {
 		}	
 	
 		if(l>k) {
-			// Echange des lignes l et k  
+			// Switching of lines l and k  
 			double tmp;
   			for (j=k; j<n; j++) {
     				tmp = M.m[k][j];
@@ -192,7 +192,8 @@ vect gauss(mat M, vect Y) {
   			Y.v[k] = Y.v[l];
   			Y.v[l] = tmp;
 		}
-		// On pivote
+		
+		// Then pivoting
 		for (i=k+1; i<n; i++) {
 
     			double q = M.m[i][k]/M.m[k][k];
@@ -204,24 +205,25 @@ vect gauss(mat M, vect Y) {
 
 	}
 	
-	// Le système est maintenant triangulaire supérieur, on l'inverse
-	return res_tri_sup(M, Y);
+	// Now the system is upper triangulary, so invert it
+	return res_upper_tri(M, Y);
 }
 
 
-vect somme_vv(vect u, vect v) {
+vect sum_vv(vect u, vect v) {
 
     vect w;
 
-    if(u.taille != v.taille)
+    if(u.size != v.size)
         return w;
 
-    w.taille = u.taille;
+    w.size = u.size;
 
     int i;
 
-    for(i=0; i<v.taille; i++)
+    for(i=0; i<v.size; i++)
         w.v[i] = u.v[i] + v.v[i] ;
 
     return w;
 }
+

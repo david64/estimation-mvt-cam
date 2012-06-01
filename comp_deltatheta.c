@@ -176,7 +176,7 @@ vect vect_lin_form(size s,  double** DF, double** dgdx, double** dgdy, double** 
 	return B;
 }
 
-// Compute deltatheta which minimize sum(1/2*w(x,y)*(r_deltatheta(x,y)^2))
+// Compute deltatheta which minimizes sum(1/2*w(x,y)*(r_deltatheta(x,y)^2))
 vect comp_deltatheta(double** DF, double** dgdx, double** dgdy, double** u1, double** u2, size s){
 
 

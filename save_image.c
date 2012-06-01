@@ -1,15 +1,15 @@
 
 
-/* enregistrer_image.c */
-/* permet d'enregistrer une image au format BMP à l'aide de la SDL */
+/* save_image.c */
+// Use the SDL to save an image
 
 
 #include <SDL/SDL.h>
-#include "params_mvt.h"
+#include "motion_params.h"
 
 
-// definirPixel : permet de modifier la couleur d'un pixel dans une SDL_Surface
-void definirPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
+// define_px : change the color of a pixel in an SDL_Surface
+void define_px(SDL_Surface *surface, int x, int y, Uint32 pixel) {
 
     int bpp = surface->format->BytesPerPixel;
     Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * bpp;
@@ -45,8 +45,8 @@ void definirPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
     }
 }
 
-// Enregistre l'image stockee dans f, au format BMP, dans filename
-void enregistrer_image(int** f, char* filename, taille t) {
+// Save the image stored in f in filename
+void save_image(int** f, char* filename, size s) {
 
 	SDL_Surface *sdl_img;
 
@@ -54,8 +54,8 @@ void enregistrer_image(int** f, char* filename, taille t) {
 
 	int i,j;
 
-	for(i=0; i<t.h; i++) {
-		for(j=0; j<t.l; j++) {
+	for(i=0; i<s.h; i++) {
+		for(j=0; j<s.w; j++) {
             
             Uint32 pixel;
 			Uint8 r,g,b,a;
@@ -64,7 +64,7 @@ void enregistrer_image(int** f, char* filename, taille t) {
 			b = f[i][j];
 			a = 255;
 			pixel = SDL_MapRGBA(sdl_img->format, r, g, b, a);
-			definirPixel(sdl_img,j,i,pixel);
+			define_px(sdl_img,j,i,pixel);
 		}
 	}
 

@@ -1,12 +1,11 @@
 
-/* moindres_carres.c */
+/* least_squares.c */
 
-#include "moindres_carres.h"
+#include "least_squares.h"
 #include <stdio.h>
 #include <math.h>
 
-/* Calcule la matrice de la forme quadratique associée 
-au problème aux moindres carrés que l'on souhaite résoudre */
+/* Compute the matrix of the quadratic form associated to the least squares problem that we have to solve */
 mat mat_forme_quadratique(int taille_x, int taille_y) {
 
 	mat Q;

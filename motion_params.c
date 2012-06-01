@@ -1,62 +1,61 @@
 
 
-/* params_mvt.c */
+/* motion_params.c */
 
 
-#include <stdlib.h>
-#include "params_mvt.h"
-#include "matrices.h"
+#include <ss.wib.h>
+#include "motion_params.h"
+#include "matrix.h"
 #include <unistd.h>
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
 
-params param_mvt(char* file_f, char* file_g, int fc) {
+params motion_params(char* file_f, char* file_g, int fc) {
 
 	double **DF, **dgdx, **dgdy, **u1, **u2;
 	int **f, **g;
 
 	int i, k, x, y;
 
-	taille t = taille_image(file_f);
+	size s = image_size(file_f);
 	
 	// allocation
-	DF   = malloc(t.h * sizeof(double*));
-	dgdy = malloc(t.h * sizeof(double*));
-	dgdx = malloc(t.h * sizeof(double*));
-	u1   = malloc(t.h * sizeof(double*));
-	u2   = malloc(t.h * sizeof(double*));
-    f    = malloc(t.h * sizeof(int*));
-	g    = malloc(t.h * sizeof(int*));
+	DF   = malloc(s.h * sizeof(double*));
+	dgdy = malloc(s.h * sizeof(double*));
+	dgdx = malloc(s.h * sizeof(double*));
+	u1   = malloc(s.h * sizeof(double*));
+	u2   = malloc(s.h * sizeof(double*));
+   	f    = malloc(s.h * sizeof(int*));
+	g    = malloc(s.h * sizeof(int*));
 	
-	for(i = 0; i<t.h; i++) {
-		DF[i]   = malloc(t.l * sizeof(double));
-		dgdy[i] = malloc(t.l * sizeof(double));
-		dgdx[i] = malloc(t.l * sizeof(double));
-		u1[i]   = malloc(t.l * sizeof(double));
-		u2[i]   = malloc(t.l * sizeof(double));
-		f[i] 	= malloc(t.l * sizeof(int));
-		g[i] 	= malloc(t.l * sizeof(int));
+	for(i = 0; i<s.h; i++) {
+		DF[i]   = malloc(s.w * sizeof(double));
+		dgdy[i] = malloc(s.w * sizeof(double));
+		dgdx[i] = malloc(s.w * sizeof(double));
+		u1[i]   = malloc(s.w * sizeof(double));
+		u2[i]   = malloc(s.w * sizeof(double));
+		f[i] 	= malloc(s.w * sizeof(int));
+		g[i] 	= malloc(s.w * sizeof(int));
 	}
 
-	// Chargement des images	
-	charger_image(f, file_f);
-	charger_image(g, file_g);
+	// Image loading	
+	load_image(f, file_f);
+	load_image(g, file_g);
 
-	// calcul du gradient de g
-	calc_grad(dgdx, dgdy, g, t);
+	// g gradient
+	comp_grad(dgdx, dgdy, g, s);
 
-	// On utilise un vecteur plutot qu'un tableau pour stocker
-	// theta car on va faire du calcul matriciel
+	// We use a vector instead of an array to store theta to be able to make computation
 	vect theta;
-	theta.taille = 7;
+	theta.size = 7;
 	
-	// Initialisations	
+	// Initializations	
 	for(i=0; i<7; i++)
 		theta.v[i] = 0;
 
-	for(x=0;x<t.h;x++) {
-		for(y=0;y<t.l;y++){
+	for(x=0;x<s.h;x++) {
+		for(y=0;y<s.w;y++){
 			DF[x][y]  = 0.0;
 			u1[x][y]  = 0.0;
 			u2[x][y]  = 0.0;
@@ -64,14 +63,14 @@ params param_mvt(char* file_f, char* file_g, int fc) {
 	}
 
     vect deltas[N];
-    int arret = 0;
+    int stop = 0;
 
-	// schema incremental pour calculer theta
+	// Incremental scheme to compute theta
 	for(k=0; k<N && (!arret); k++){
 		
-		calc_utheta(u1, u2, theta, t);
-		calc_DFtheta(DF, u1, u2, f, g, theta.v[6], t);
-		vect deltatheta = calc_deltatheta(DF, dgdx, dgdy, u1, u2, t);
+		comp_utheta(u1, u2, theta, t);
+		comp_DFtheta(DF, u1, u2, f, g, theta.v[6], t);
+		vect deltatheta = comp_deltatheta(DF, dgdx, dgdy, u1, u2, t);
 
 		
 		for(i=0; i<7; i++) {
@@ -80,18 +79,18 @@ params param_mvt(char* file_f, char* file_g, int fc) {
 
         deltas[k] = deltatheta;
 
-        arret = critere_arret(deltas, k);
+        stop = stop_criterion(deltas, k);
 	}
 
-#ifndef ETUDE_STAT
+#ifndef STAT_STUDY
 
-//    printf("Nombre d'iterations : %i \n", k);
+//    printf("Iteration number : %i \n", k);
 
 #endif
 
-#ifdef ETUDE_STAT
+#ifdef STAT_STUDY
 
-    // Pour l'etude statistique sur Matlab
+    // For statistical study on octave
     
     char stats[N*1000] = "A = [";
 
@@ -115,8 +114,8 @@ params param_mvt(char* file_f, char* file_g, int fc) {
 
 #endif
 
-	// desallocation
-	for(i = 0; i<t.h; i++) {
+	// deallocation
+	for(i = 0; i<s.h; i++) {
 		free(DF[i]);
 		free(dgdy[i]);
 		free(dgdx[i]);
@@ -134,8 +133,7 @@ params param_mvt(char* file_f, char* file_g, int fc) {
 	free(f);
 	free(g);
 	
-	// resultat (on renvoie la conversion de (a1,a2,c1,c2,q1,q2,xi)
-	// en parametres de camera interpretables
-	return conversion_params(theta, fc);
+	// Result (after conversion of a1,a2,c1,c2,q1,q2,xi into interpretable parameters)
+	return params_conversion(theta, fc);
 }
 

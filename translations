@@ -12,7 +12,7 @@ calc_grad comp_grad
 calc_utheta comp_utheta
 conversion_params params_conversion
 critere_arret stop_criterion
-calc_camera_pos comp_cam_position
+calc_pos_camera comp_cam_position
 matrice.lignes matrix.rows
 matrice.colonnes matrix.columns
 pos.centre.taille pos.center.size
@@ -24,9 +24,18 @@ produit_mv product_mv
 somme_vv sum_vv
 mvt_cam_matlab octave_cam_motion
 MVT_CAM_H CAM_MOTION_H
+pos_camera cam_position
 mat_forme_q mat_quad_form
 vect_forme_lin vect_lin_form
 calc_deltatheta comp_deltatheta
 res_tri_sup res_upper_tri
 res_tri_inf res_lower_tri
-
+obtenirPixel get_px
+taille_image image_size
+charger_image load_image
+simul_mvt motion_simulation
+param_mvt motion_params
+somme_p sum_p
+somme_vv sum_vv
+MAT_TAILLE MAT_SIZE
+conversion_params_inverse reverse_params_conversion

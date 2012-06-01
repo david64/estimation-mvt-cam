@@ -1,12 +1,12 @@
 
 
-#include "simul_mvt.h"
+#include "motion_simulation.h"
 #include <stdio.h>
 
 void main(int argc, char* argv[]) {
 
 	if(argc<8) {
-		printf("Pas assez d'arguments \n");
+		printf("Not enough arguments \n");
 		return;
 	}
 
@@ -19,9 +19,9 @@ void main(int argc, char* argv[]) {
 	sscanf(argv[7], "%le", &P.B);
 	sscanf(argv[8], "%le", &P.C);
 
-	printf("%le - %le - %le - %le - %le - %le\n", P.gamma, P.alpha, P.beta, P.A, P.B, P.C);
+//	printf("%le - %le - %le - %le - %le - %le\n", P.gamma, P.alpha, P.beta, P.A, P.B, P.C);
 
-    simul_mvt(argv[1], argv[2], P);
+    motion_simulation(argv[1], argv[2], P);
 
 	return;
 }

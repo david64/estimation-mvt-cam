@@ -1,62 +1,60 @@
 
 
-/* params_mvt.h */
+/* motion_params.h */
 
 
 #ifndef PARAMS
 #define PARAMS
 
 #include <stdlib.h>
-#include "matrices.h"
+#include "matrix.h"
 
 #define N 100		
-#define MARGE 50 	
+#define MARGIN 50 	
 
-// Parametres d'un mouvement de camera
+// Parameters of a camera motion
 typedef struct
 {
 	double gamma, alpha, beta, A, B, C; 
-} params; // Le theta minuscule de la these s'appelle ici gamma pour eviter toute confusion
+} params; // The lower case theta is here called gamma for clarity
 
-// Taille d'une image
+// Size of an image
 typedef struct
 {
-	int h, l; // h pour hauteur (nbr de lignes) et l pour doubleueur (nbr de colonnes)
-} taille;
+	int h, w;
+} size
 
-// Calcul les parametres d'un mouvement de camera envoyant l'image f sur g
-params param_mvt(char* file_f, char* file_g, int fc);
+// Compute the parameters of the motion f -> g
+params motion_params(char* file_f, char* file_g, int fc);
 
-// Donne la taille d'une image
-taille taille_image(char* file);
+// Give the size of an image
+size image_size(char* file);
 
-// Charge l'image en niveaux de gris dans file_g. Ecrit dans g. /!\ g est supposé alloué.
-void charger_image(int** g, char* file_g);
+// Load a grayscale image file_g. Write in g. Be careful, g is expected to be already allocated !
+void load_image(int** g, char* file_g);
 
-// Calcule le gradient de g. Ecrit le resultat dans (dgdx, dgdy)
-void calc_grad(double** dgdx, double** dgdy, int** g, taille t); 
+// Compute grad(g). Write the result in (dgdx, dgdy).
+void comp_grad(double** dgdx, double** dgdy, int** g, size s); 
 
-// Calcule le flot optique u parametre par theta. Ecrit dans u
-void calc_utheta(double** u1, double** u2, vect theta, taille t); 
+// Compute the parametric optical flow u_theta. Write in u.
+void comp_utheta(double** u1, double** u2, vect theta, size s); 
 
-// Calcule DF_theta (quantite que l'on souhaite minimiser !). Ecrit dans DF
-void calc_DFtheta(double** DF, double** u1, double** u2, int** f, int** g, double xi, taille t);
+// Compute DF_theta. Write in D.F
+void comp_DFtheta(double** DF, double** u1, double** u2, int** f, int** g, double xi, size s);
 
-// Calcule deltatheta minimisant somme(1/2 * w(x,y) * r_deltatheta^2)
-vect calc_deltatheta(double** DF, double** dgdx, double** dgdy, double** u1, double** u2, taille t);
+// Compute deltatheta which minimizes sum(1/2 * w(x,y) * r_deltatheta^2)
+vect comp_deltatheta(double** DF, double** dgdx, double** dgdy, double** u1, double** u2, size s);
 
-// Convertit les parametres (a1,a2,c1,c2,q1,q2,xi) en parametres de camera interpretables (theta, alpha, beta, A, B, C)
-params conversion_params(vect, int fc);
+// Convert parameters (a1,a2,c1,c2,q1,q2,xi) into parameters (theta, alpha, beta, A, B, C)
+params params_conversion(vect, int fc);
 
-// Calcule la moyenne ponderee des pixels autour d'une coordonnee non entiere
-double interp_pixel(double**, double, double);
+// Compute the weighted mean of pixels around non-integer coordinates
+double px_interp(double**, double, double);
 
-// Idem, mais pour des tableaux d'entiers
-int interp_pixeli(int**, double, double);
+// Same thing for integer pixels
+int int_px_interp(int**, double, double);
 
-// double max_derniers_ecarts_moy(double norme[N1], int k); 
-
-
+// Stopping criterion
 int critere_arret(vect deltas[N], int i);
 
 #endif

@@ -1,13 +1,12 @@
 
 
 #include <math.h>
-#include "simul_mvt.h"
+#include "motion_simulation.h"
 
 
-vect conversion_params_inverse(params p) {
-
-	// Ce programme renvoie (a1,â€¦ , q2) Ã  partir de (theta, alpha,â€¦ ,C)
-	// C'est la fonction inverse de conversion_params
+vect reverse_params_conversion(params p) {
+	
+	// Convert (theta, etc) into (a1, etc)
 	vect theta;
 	theta.v[0] = -p.C;
 	theta.v[1] = p.beta;
