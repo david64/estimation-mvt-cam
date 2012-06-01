@@ -44,7 +44,7 @@ void comp_grad(double** dgdx, double** dgdy, int** g, size s) {
 
 
 // Compute u_theta given motion parameters theta. Write the result in u1 and u2
-void comp_utheta(double** u1, double** u2, vect theta, size s) {
+void comp_utheta(double** u1, double** u2, vect theta, taille t) {
 
 	int x,y;
 	for (x = MARGIN ; x < s.h-MARGIN ; x++) {

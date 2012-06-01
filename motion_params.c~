@@ -94,7 +94,7 @@ params motion_params(char* file_f, char* file_g, int fc) {
     
     char stats[N*1000] = "A = [";
 
-    int j;
+    int i,j;
     for(j=0; j<k; j++) {
 
         for(i=0; i<7; i++){

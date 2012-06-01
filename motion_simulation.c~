@@ -1,5 +1,5 @@
 
-#include <stdio.h>
+
 #include "motion_simulation.h"
 
 
@@ -57,7 +57,7 @@ void motion_simulation(char* file, char* out, params p)
 		}
 	}
 
-    printf("h : %d, w : %d \n", s.h, s.w);
+    printf("h : %d, l : %d \n", s.h, s.w);
 
 	// Save g
 	save_image(g, out, s);

@@ -55,7 +55,7 @@ double px_interp(double**, double, double);
 int int_px_interp(int**, double, double);
 
 // Stopping criterion
-int stop_criterion(vect deltas[N], int i);
+int critere_arret(vect deltas[N], int i);
 
 #endif
 

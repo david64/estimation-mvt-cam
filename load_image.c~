@@ -43,7 +43,7 @@ size image_size(char* file) {
 	s.h = sdl_img->h;
 	SDL_FreeSurface(sdl_img);
     IMG_Quit();
-	return s;  
+	return t;  
 
 }
 

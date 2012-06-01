@@ -101,7 +101,7 @@ int main(int argc, char* argv[]) {
 
     if(argc==7){
    
-        cam_position* pos = malloc(sizeof(cam_position)*n);
+        cam_pos* pos = malloc(sizeof(cam_position)*n);
 
         comp_cam_position(motion, pos, n, fc);
         octave_cam_motion(pos, n, argv[6]);

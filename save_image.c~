@@ -50,7 +50,7 @@ void save_image(int** f, char* filename, size s) {
 
 	SDL_Surface *sdl_img;
 
-	sdl_img = SDL_CreateRGBSurface(0, s.w, s.h, 32, 0,0,0,0);
+	sdl_img = SDL_CreateRGBSurface(0, t.l, t.h, 32, 0,0,0,0);
 
 	int i,j;
 
