@@ -39,3 +39,7 @@ somme_p sum_p
 somme_vv sum_vv
 MAT_TAILLE MAT_SIZE
 conversion_params_inverse reverse_params_conversion
+mat_forme_quadratique least_squares_quad
+vect_forme_lineaire least_squares_lin
+params_moindres_carres least_squares_params
+MOINDRES_CARRES LEAST_SQUARES

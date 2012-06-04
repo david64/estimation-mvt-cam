@@ -1,34 +1,29 @@
 
-/* moindres_carres.h */
-/* Calcule une approximation des paramètres du mouvement de caméra a1,a2,c1,c2,q1,q2
-décrits dans la thèse de C.Jonchéry en utilisant la méthode des moindres carrés */
+/* least_squares.h */
+// Compute an appoximation of (a1,a2,c1,c2,q1,q2) as they are described in the Jonchery thesis with a least squares method
 
 
-#ifndef MOINDRES_CARRES
-#define MOINDRES_CARRES
+#ifndef LEAST_SQUARES
+#define LEAST_SQUARES
 
 
-#include "matrices.h"
+#include "matrix.h"
 
-/* Paramètres du mouvement de caméra tels que décrits dans la thèse de C. Jonchéry */
+// Camera motion parameters
 typedef struct {
 
 	double a1,a2,c1,c2,q1,q2;
 
 } params;
 
-/* Calcule la forme quadratique associée à la détermination des paramètres du mouvement par moindres carrés,
-pour le mouvement de caméra à 6 paramètres */
-mat mat_forme_quadratique(int taille_x, int taille_y); 
+// Quadratic form of the least squares method
+mat least_squares_quad(int size_x, int size_y); 
 
-/* Calcule la forme linéaire associée à la détermination des paramètres du mouvement par moindres carrés,
-pour le mouvement de caméra à 6 paramètres, où (flot_x, flot_y) est le flot optique entre les deux images
-consécutives */
-vect vect_forme_lineaire(int taille_x, int taille_y, double** flot_x, double** flot_y); 
+// Linear form of the least squares method
+vect least_squares_lin(int size_x, int size_y, double** flow_x, double** flow_y); 
 
-/* Calcule une approximation des paramètres du mouvement par la méthode des moindres carrés, où (flot_x,flot_y)
-est le flot optique entre les deux images consécutives */
-params params_moindres_carres(int taille_x, int taille_y, double** flot_x, double** flot_y);
+// Final computation
+params least_squares_params(int size_x, int size_y, double** flow_x, double** flow_y);
 
 
 #endif

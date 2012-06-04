@@ -6,11 +6,11 @@
 #include <math.h>
 
 /* Compute the matrix of the quadratic form associated to the least squares problem that we have to solve */
-mat least_squares_quad_form(int size_x, int size_y) {
+mat mat_forme_quadratique(int taille_x, int taille_y) {
 
 	mat Q;
-	Q.rows = 6;
-	Q.columns = 6;
+	Q.lignes = 6;
+	Q.colonnes = 6;
 	
 	int x,y,i,j;
 	
@@ -19,8 +19,8 @@ mat least_squares_quad_form(int size_x, int size_y) {
 			Q.m[i][j] = 0.0;
 	}	
 
-	for(x=0;x<size_x;x++) {
-		for(y=0;y<size_y;y++) {
+	for(x=0;x<taille_x;x++) {
+		for(y=0;y<taille_y;y++) {
 
 			Q.m[0][0] += (x*x + y*y);
 			Q.m[0][2] += (x);
@@ -61,22 +61,23 @@ mat least_squares_quad_form(int size_x, int size_y) {
 	return Q;
 }
 
-/* Compute the vector of the linear form associated to the least squares problem that we have to solve */
-vect least_squares_lin(int size_x, int size_y, double** flow_x, double** flow_y) {
+/* Calcule le vecteur de la forme linéaire associée au problème aux moindres carrés que
+l'on souhaite résoudre */
+vect vect_forme_lineaire(int taille_x, int taille_y, double** flot_x, double** flot_y) {
 
 	vect l;
-	l.size = 6;
+	l.taille = 6;
 
 	int x,y,i;
 
 	for(i=0;i<6;i++)
 		l.v[i] = 0.0;
 
-	for(x=0;x<size_x;x++){
-		for(y=0;y<size_y; y++) {
+	for(x=0;x<taille_x;x++){
+		for(y=0;y<taille_y; y++) {
 
-			double a = flow_x[x][y];
-			double b = flow_y[x][y];
+			double a = flot_x[x][y];
+			double b = flot_y[x][y];
 
 		  	l.v[0] +=  (a*x + b*y);
 			l.v[1] +=  (a*y - b*x);
@@ -93,11 +94,12 @@ vect least_squares_lin(int size_x, int size_y, double** flow_x, double** flow_y)
 	return l;
 }
 
-// Compute an approximation of the motion parameters using the optical flow
-params least_squares_params(int size_x, int size_y, double** flow_x, double** flow_y){
+/* Donne une approximation des paramètres du mouvement de la caméra à partir du flot optique,
+par moindre carrés par rapport aux paramètres */
+params params_moindres_carres(int taille_x, int taille_y, double** flot_x, double** flot_y){
 
-	mat U = least_squares_quad(size_x, size_y);
-	vect B = least_squares_lin(size_xsize_y, flow_x, flow_y);
+	mat U = mat_forme_quadratique(taille_x, taille_y);
+	vect B = vect_forme_lineaire(taille_x, taille_y, flot_x, flot_y);
         
 	mat L = cholesky(U);
  	
@@ -105,7 +107,7 @@ params least_squares_params(int size_x, int size_y, double** flow_x, double** fl
 	for(i=0;i<6;i++)
 		B.v[i] *= (-0.5);
 
-	vect C = res_upper_tri(L, res_lower_tri(transpose(L), B));
+	vect C = res_tri_sup(L, res_tri_inf(transpose(L), B));
 	params p = {C.v[0], C.v[1], C.v[2], C.v[3], C.v[4], C.v[5]};     	
 	
 	return p;
