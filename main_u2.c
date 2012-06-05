@@ -30,9 +30,11 @@ int main(int argc, char* argv[]) {
 	    double fc;
 	    sscanf(argv[7], "%le", &fc);
 
-		vect theta = reverse_params_conversion(P, fc);
+	    vect theta = reverse_params_conversion(P, fc);
 
 	    size s = image_size(argv[8]);
+
+	    printf("P2\n%i %i\n65000\n", s.w, s.h);
 
 	    int x,y;
 	    for (x = 0; x <s.h ; x++)
