@@ -5,7 +5,7 @@
 #include "flow_input.h"
 #include "motion_params.h"
 
-void main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
 
     if (argc<4) {
         printf("Not enougth parameters");
@@ -37,6 +37,6 @@ void main(int argc, char* argv[]) {
 
    printf("%le %le %le %le %le %le", P.gamma, P.alpha, P.beta, P.A, P.B, P.C);
    
-   return;
+   return 1;
 }
 

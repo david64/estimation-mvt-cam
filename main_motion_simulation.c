@@ -3,7 +3,7 @@
 #include "motion_simulation.h"
 #include <stdio.h>
 
-void main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
 
 	if(argc<8) {
 		printf("Not enough arguments \n");
@@ -23,6 +23,6 @@ void main(int argc, char* argv[]) {
 
     motion_simulation(argv[1], argv[2], P);
 
-	return;
+	return 1;
 }
 

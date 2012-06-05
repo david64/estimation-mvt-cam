@@ -4,9 +4,11 @@
 #include "motion_params.h"
 
 
-void main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
 
 	    motion_params(argv[1], argv[2], 180);
+        return 1;
 }
+
 
 
