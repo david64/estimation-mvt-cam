@@ -16,32 +16,32 @@ vect reverse_params_conversion(params p, int fc) {
 	return theta;
 }
 
-void main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
 
-	    params P;
+	params P;
 
-	        sscanf(argv[1], "%le", &P.gamma);
-		sscanf(argv[2], "%le", &P.alpha);
-		sscanf(argv[3], "%le", &P.beta);
-		sscanf(argv[4], "%le", &P.A);
-		sscanf(argv[5], "%le", &P.B);
-		sscanf(argv[6], "%le", &P.C);
+    sscanf(argv[1], "%le", &P.gamma);
+	sscanf(argv[2], "%le", &P.alpha);
+	sscanf(argv[3], "%le", &P.beta);
+	sscanf(argv[4], "%le", &P.A);
+	sscanf(argv[5], "%le", &P.B);
+	sscanf(argv[6], "%le", &P.C);
 		   
-		    double fc;
-		        sscanf(argv[7], "%le", &fc);
+	double fc;
+	sscanf(argv[7], "%le", &fc);
 
-			vect theta = reverse_params_conversion(P, fc);
+	vect theta = reverse_params_conversion(P, fc);
 
-			    size s = image_size(argv[8]);
+	size s = image_size(argv[8]);
 			        
-			        printf("P2\n%i %i\n65000\n", s.w, s.h);
+	printf("P2\n%i %i\n65000\n", s.w, s.h);
 
-				int x,y;
-				    for (x = 0 ; x<s.h ; x++)
-					    for (y = 0 ; y<s.w ; y++)
-						    printf("%le \n", theta.v[2] + theta.v[0]*(x-s.h/2) + theta.v[1]*(y-s.w/2) + theta.v[4]*(x-s.h/2)*(x-s.h/2) + theta.v[5]*(x-s.h/2)*(y-s.w/2));
+	int x,y;
+	 for (x = 0 ; x<s.h ; x++)
+	    for (y = 0 ; y<s.w ; y++)
+		    printf("%le \n", theta.v[2] + theta.v[0]*(x-s.h/2) + theta.v[1]*(y-s.w/2) + theta.v[4]*(x-s.h/2)*(x-s.h/2) + theta.v[5]*(x-s.h/2)*(y-s.w/2));
 				        
-				        return;
+	return 1;
 }
 
 
