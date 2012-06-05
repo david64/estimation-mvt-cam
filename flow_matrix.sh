@@ -6,6 +6,9 @@
 parameters $1 $2 $3 > cam_motion_params
 P=$(/bin/cat cam_motion_params)
 
+# Some table formatting
+table $P > cam_motion_params
+
 # Then, compute the vertical flow associated to motion $P with focale $3 and size of image $1
 u1 $P $3 $1 > vertical_flow
 
