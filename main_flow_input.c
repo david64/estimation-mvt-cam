@@ -18,12 +18,12 @@ int main(int argc, char* argv[]) {
    
    int i;
 
-   u1 = malloc(sizeof(double*)*s.w);
-   u2 = malloc(sizeof(double*)*s.w);
+   u1 = malloc(sizeof(double*)*s.h);
+   u2 = malloc(sizeof(double*)*s.h);
 
-   for(i=0;i<s.w;i++){
-           u1[i] = malloc(sizeof(double)*s.h);
-           u2[i] = malloc(sizeof(double)*s.h);
+   for(i=0;i<s.h;i++){
+           u1[i] = malloc(sizeof(double)*s.w);
+           u2[i] = malloc(sizeof(double)*s.w);
    }
 
    read_flow(u1, s, argv[1]);
