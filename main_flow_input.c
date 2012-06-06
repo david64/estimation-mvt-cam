@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
 
     if (argc<4) {
         printf("Not enough parameters");
-        return;
+        return 1;
     }
 
    size s = flow_size(argv[1]);
