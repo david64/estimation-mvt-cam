@@ -8,7 +8,7 @@
 int main(int argc, char* argv[]) {
 
     if (argc<4) {
-        printf("Not enougth parameters");
+        printf("Not enough parameters");
         return;
     }
 
