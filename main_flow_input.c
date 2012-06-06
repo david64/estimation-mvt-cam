@@ -36,7 +36,15 @@ int main(int argc, char* argv[]) {
    params P = params_conversion(vp, fc);
 
    printf("%le %le %le %le %le %le", P.gamma, P.alpha, P.beta, P.A, P.B, P.C);
-   
+
+   for(i=0;i<s.w;i++){
+           free(u1[i]);
+           free(u2[i]); 
+   }
+    
+   free(u1);
+   free(u2);
+
    return 1;
 }
 
