@@ -1,7 +1,7 @@
 
 option=-lpng -lm -std=c99 -Wall -D EXIT_SUCCESS=0
 
-all : parameters parameters_seq u1 u2 parameters_flow_input deltathetas motion_simulation table
+all : parameters parameters_seq u1 u2 parameters_flow_input deltathetas motion_simulation table subsampling
 
 parameters: main_parameters.c matrix.c motion_params.c comp_deltatheta.c aux.c motion_params.h matrix.h
 	gcc main_parameters.c matrix.c motion_params.c comp_deltatheta.c io_png.c aux.c -o parameters $(option)
@@ -27,3 +27,5 @@ motion_simulation: main_motion_simulation.c motion_params.h motion_simulation.c
 table: main_tab.c
 	gcc main_tab.c -o table $(option)
 
+subsampling: main_subsampling.c
+	gcc main_subsampling.c io_png.c aux.c -o subsampling $(option)
