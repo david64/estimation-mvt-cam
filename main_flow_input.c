@@ -45,6 +45,6 @@ int main(int argc, char* argv[]) {
    free(u1);
    free(u2);
 
-   return 1;
+   return EXIT_SUCCESS;
 }
 

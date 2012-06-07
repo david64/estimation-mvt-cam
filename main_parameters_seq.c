@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
 
 	if(argc<6) {
 		printf("Not enough arguments !\n");
-		return 0;
+		return 1;
 	}
 
 
@@ -121,6 +121,6 @@ int main(int argc, char* argv[]) {
 
     free(files);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 

@@ -7,7 +7,7 @@
 int main(int argc, char* argv[]) {
 
 	    motion_params(argv[1], argv[2], 180);
-        return 1;
+        return EXIT_SUCCESS;
 }
 
 

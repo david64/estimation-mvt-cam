@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 	    for (y = 0 ; y<s.w ; y++)
 		    printf("%le \n", theta.v[2] + theta.v[0]*(x-s.h/2) + theta.v[1]*(y-s.w/2) + theta.v[4]*(x-s.h/2)*(x-s.h/2) + theta.v[5]*(x-s.h/2)*(y-s.w/2));
 				        
-	return 1;
+	return EXIT_SUCCESS;
 }
 
 

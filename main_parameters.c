@@ -11,6 +11,6 @@ int main(int argc, char* argv[]) {
 	
     params P = motion_params(argv[1], argv[2], fc);	
 	printf("%le %le %le %le %le %le", P.gamma, P.alpha, P.beta, P.A, P.B, P.C);
-	return 1;
+	return EXIT_SUCCESS;
 }
 

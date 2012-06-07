@@ -23,6 +23,6 @@ int main(int argc, char* argv[]) {
 
     motion_simulation(argv[1], argv[2], P);
 
-	return 1;
+	return EXIT_SUCCESS;
 }
 
