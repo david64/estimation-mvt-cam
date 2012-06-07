@@ -1,5 +1,5 @@
 
-option=-lSDL -std=c99 -Wall
+option=-lSDL -std=c99 -Wall -D EXIT_SUCCESS=0
 
 all : parameters parameters_seq u1 u2 parameters_flow_input deltathetas motion_simulation table
 
@@ -25,5 +25,5 @@ motion_simulation: main_motion_simulation.c reverse_params_conversion.c motion_p
 	gcc motion_simulation.c reverse_params_conversion.c save_image.c load_image.c main_motion_simulation.c -o motion_simulation -lSDL_image $(option)
 
 table: main_tab.c
-	gcc main_tab.c -o table
+	gcc main_tab.c -o table $(option)
 
