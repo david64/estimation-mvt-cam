@@ -17,7 +17,7 @@ size flow_size(char* file) {
     while(fgets(lec, 512, f) != NULL && row<3) {
         
         if(row==2)
-            sscanf(lec, "%d %d", &s.w, &s.h);        
+            sscanf(lec, "%d %d", &s.h, &s.w);        
         
         row++;
     }   
