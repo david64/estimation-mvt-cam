@@ -1,11 +1,11 @@
 
-
 /* motion_params.c */
 
 
 #include <stdlib.h>
 #include "motion_params.h"
 #include "matrix.h"
+#include "io_png.h"
 #include <unistd.h>
 #include <math.h>
 #include <string.h>
@@ -14,20 +14,25 @@
 params motion_params(char* file_f, char* file_g, int fc) {
 
 	double **DF, **dgdx, **dgdy, **u1, **u2;
-	int **f, **g;
+    float *f, *g;
 
 	int i, k, x, y;
 
-	size s = image_size(file_f);
-	
+    // input images loading
+    size_t nx, ny;
+    f = io_png_read_flt_opt(file_f, &ny, &nx, NULL, IO_PNG_OPT_GRAY);
+    g = io_png_read_flt_opt(file_g, NULL, NULL, NULL, IO_PNG_OPT_GRAY);
+
+    size s;
+    s.h = (int) nx;
+    s.w = (int) ny;
+
 	// allocation
 	DF   = malloc(s.h * sizeof(double*));
 	dgdy = malloc(s.h * sizeof(double*));
 	dgdx = malloc(s.h * sizeof(double*));
 	u1   = malloc(s.h * sizeof(double*));
 	u2   = malloc(s.h * sizeof(double*));
-   	f    = malloc(s.h * sizeof(int*));
-	g    = malloc(s.h * sizeof(int*));
 	
 	for(i = 0; i<s.h; i++) {
 		DF[i]   = malloc(s.w * sizeof(double));
@@ -35,13 +40,7 @@ params motion_params(char* file_f, char* file_g, int fc) {
 		dgdx[i] = malloc(s.w * sizeof(double));
 		u1[i]   = malloc(s.w * sizeof(double));
 		u2[i]   = malloc(s.w * sizeof(double));
-		f[i] 	= malloc(s.w * sizeof(int));
-		g[i] 	= malloc(s.w * sizeof(int));
 	}
-
-	// Image loading	
-	load_image(f, file_f);
-	load_image(g, file_g);
 
 	// g gradient
 	comp_grad(dgdx, dgdy, g, s);
@@ -72,7 +71,6 @@ params motion_params(char* file_f, char* file_g, int fc) {
 		comp_DFtheta(DF, u1, u2, f, g, theta.v[6], s);
 		vect deltatheta = comp_deltatheta(DF, dgdx, dgdy, u1, u2, s);
 
-		
 		for(i=0; i<7; i++) {
 			theta.v[i] += (deltatheta.v[i]);
 		}
@@ -81,12 +79,6 @@ params motion_params(char* file_f, char* file_g, int fc) {
 
         stop = stop_criterion(deltas, k);
 	}
-
-#ifndef STAT_STUDY
-
-//    printf("Iteration number : %i \n", k);
-
-#endif
 
 #ifdef STAT_STUDY
 
@@ -112,18 +104,15 @@ params motion_params(char* file_f, char* file_g, int fc) {
     strcat(stats, "];");
     printf(stats);
     
-
 #endif
 
-	// deallocation
+	// desallocation
 	for(i = 0; i<s.h; i++) {
 		free(DF[i]);
 		free(dgdy[i]);
 		free(dgdx[i]);
 		free(u1[i]);
 		free(u2[i]);
-		free(f[i]);
-		free(g[i]);
 	}
 
 	free(DF);

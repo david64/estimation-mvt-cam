@@ -6,13 +6,16 @@
 
 #include "motion_params.h"
 #include <math.h>
+#include "io_png.h"
+
 
 #ifndef M_PI
 	#define M_PI 3.14
 #endif
 
+
 // Compute DF_theta, write the result into DF
-void comp_DFtheta (double** DF, double** u1, double** u2, int** f, int** g, double xi, size s){
+void comp_DFtheta (double** DF, double** u1, double** u2, float* f, float* g, double xi, size s){
 
 	int x,y;
 
@@ -23,21 +26,21 @@ void comp_DFtheta (double** DF, double** u1, double** u2, int** f, int** g, doub
 			double y_ = y + u2[x][y];
 			
 			if(-1<x_ && x_<s.h-1 && -1<y_ && y_<s.w-1)
-				DF[x][y] = int_px_interp(g, x_, y_) - f[x][y] + xi;
+				DF[x][y] = img_px_interp(g, x_, y_,s) - get_pixel(f,x,y,s) + xi;
 		}	
 	}
 }
 
 // Compute the discrete gradient of g. Write the result in dgdx and dgdy.
-void comp_grad(double** dgdx, double** dgdy, int** g, size s) {
+void comp_grad(double** dgdx, double** dgdy, float* g, size s) {
 
 	int x,y;
 	for (x = 1 ; x < s.h-1 ; x++) {
 	
 		for (y = 1 ; y < s.w-1 ; y++) {
 	
-			dgdx[x][y] = (g[x+1][y] - g[x-1][y])/2;
-			dgdy[x][y] = (g[x][y+1] - g[x][y-1])/2;
+			dgdx[x][y] = (get_pixel(g,x+1,y,s) - get_pixel(g,x-1,y,s))/2;
+			dgdy[x][y] = (get_pixel(g,x,y+1,s) - get_pixel(g,x,y-1,s))/2;
 		}
 	}
 }
@@ -100,6 +103,16 @@ int int_px_interp(int** t, double x_, double y_){
 
 }
 
+// Same function with an image
+float img_px_interp(float* t, double x_, double y_, size s){
+
+	int x = x_;
+	int y = y_;
+	
+	return  (x_- x)*(y_-y)*get_pixel(t,x+1,y+1,s) + (x_-x)*(1-y_+y)*get_pixel(t,x+1,y,s) + (1-x_+x)*(y_-y)*get_pixel(t,x,y+1,s) + (1-x_+x)*(1-y_+y)*get_pixel(t,x,y,s);
+
+}
+
 // Stopping criterion, found empirically
 int stop_criterion(vect deltas[N], int i) {
 
@@ -115,4 +128,35 @@ int stop_criterion(vect deltas[N], int i) {
     return (fabs(s) <= fabs((deltas[i]).v[2] - (deltas[i-1]).v[2])/2);
 
 }
+
+// Return the pixel (i,j) of the image
+float get_pixel(float* img, int i, int j, size s) { return img[j + s.w*i]; }
+
+// Set the pixel (i,j) of an image
+void set_pixel(float* img, int i, int j, size s, float p) { img[j + s.w*i] = p; }
+
+// Convert parameters (theta, alpha, beta, A, B, C) into parameters (a1, a2, c1, c2, q1, q2)
+vect reverse_params_conversion(params p, int fc) {
+
+	vect theta;
+	theta.v[0] = -p.C;
+	theta.v[1] = p.beta;
+	theta.v[2] = fc*(p.A - (p.alpha)*sin(p.gamma));
+	theta.v[3] = fc*(p.B + (p.alpha)*cos(p.gamma));
+	theta.v[4] = -(p.alpha)*sin(p.gamma)/fc;
+	theta.v[5] = (p.alpha)*cos(p.gamma)/fc;
+	return theta;
+}
+
+// Return the size of the png image "file"
+size image_size(char* file) {
+
+    size s;
+    size_t nx, ny;
+    io_png_read_flt(file, &ny, &nx, NULL);
+    s.h = (int) nx;
+    s.w = (int) ny;
+    return s;
+}
+
 

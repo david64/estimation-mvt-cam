@@ -1,13 +1,14 @@
 
-
-#include "motion_simulation.h"
 #include <stdio.h>
+#include "motion_params.h"
+
+void motion_simulation(char* file, char* out, params p, int fc); 
 
 int main(int argc, char* argv[]) {
 
-	if(argc<8) {
+	if(argc<9) {
 		printf("Not enough arguments \n");
-		return;
+		return 1;
 	}
 
 	params P;
@@ -19,9 +20,10 @@ int main(int argc, char* argv[]) {
 	sscanf(argv[7], "%le", &P.B);
 	sscanf(argv[8], "%le", &P.C);
 
-//	printf("%le - %le - %le - %le - %le - %le\n", P.gamma, P.alpha, P.beta, P.A, P.B, P.C);
+    int fc = 1;
+    sscanf(argv[9], "%i", &fc);
 
-    motion_simulation(argv[1], argv[2], P);
+    motion_simulation(argv[1], argv[2], P, fc);
 
 	return EXIT_SUCCESS;
 }

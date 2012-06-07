@@ -1,39 +1,35 @@
 
+
 #include <stdio.h>
-#include "motion_simulation.h"
+#include "motion_params.h"
+#include "io_png.h"
 
 
-int int_px_interp(int** t, double x_, double y_);
-
-
-void motion_simulation(char* file, char* out, params p)
-{
+void motion_simulation(char* file, char* out, params p, int fc) {
 
 	size s = image_size(file);
 
-	int **f, **g;
 	double **u1, **u2;
+    float *f, *g;
 
 	// Allocation
-	f = malloc(s.h * sizeof(int*));
-	g = malloc(s.h * sizeof(int*));
-	u1 = malloc(s.h * sizeof(double*));
+    g = malloc(sizeof(float) * s.h * s.w);
+    
+    u1 = malloc(s.h * sizeof(double*));
 	u2 = malloc(s.h * sizeof(double*));
 
 	int i;
-	for (i = 0 ; i < s.h ; i++)
-	{
-		f[i] = malloc(s.w * sizeof(int));
-		g[i] = malloc(s.w * sizeof(int));
+	for (i = 0 ; i < s.h ; i++) {
+		
 		u1[i] = malloc(s.w * sizeof(double));
 		u2[i] = malloc(s.w * sizeof(double));
 	}
 
-	// Load image f
-	load_image(f, file);
+    // Load image
+    f = io_png_read_flt_opt(file,NULL, NULL, NULL, IO_PNG_OPT_GRAY);
 
 	// Compute optical flow u
-	vect theta = reverse_params_conversion(p);
+	vect theta = reverse_params_conversion(p, fc);
 	
 	int x,y;
 	for (x = 0 ; x < s.h ; x++) {
@@ -51,23 +47,19 @@ void motion_simulation(char* file, char* out, params p)
 		for (y=0 ; y<s.w ; y++)
 		{
 			if ( -1 < x - u1[x][y] && x - u1[x][y] < s.h -1 &&  -1 < y - u2[x][y] && y - u2[x][y]<s.w -1 ) 
-				g[x][y] = int_px_interp(f, x - u1[x][y], y - u2[x][y]);
+				set_pixel(g, x, y, s, img_px_interp(f, x - u1[x][y], y - u2[x][y], s));
 			else
-				g[x][y] = 0;
+				set_pixel(g, x, y, s, 0.0);
 		}
 	}
 
-    printf("h : %d, w : %d \n", s.h, s.w);
-
-	// Save g
-	save_image(g, out, s);
+	// Write g
+    io_png_write_flt(out, g, (size_t) s.h, (size_t) s.w, 1);
 
 	// Deallocation
-	for (i=0 ; i < s.h ; i++)
-	{
-		free(f[i]);
-		free(g[i]);
-		free(u1[i]);
+	for (i=0 ; i < s.h ; i++) {
+		
+        free(u1[i]);
 		free(u2[i]);
 	}
 
@@ -75,16 +67,6 @@ void motion_simulation(char* file, char* out, params p)
 	free(g);
 	free(u1);
 	free(u2);
-}
-
-
-int int_px_interp(int** t, double x_, double y_){
-
-	int x = x_;
-	int y = y_;
-	
-	return  (x_- x)*(y_-y)*t[x+1][y+1] + (x_-x)*(1-y_+y)*t[x+1][y] + (1-x_+x)*(y_-y)*t[x][y+1] + (1-x_+x)*(1-y_+y)*t[x][y];
-
 }
 
 

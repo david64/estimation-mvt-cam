@@ -4,18 +4,6 @@
 #include <math.h>
 #include "motion_params.h"
 
-vect reverse_params_conversion(params p, int fc) {
-
-	vect theta;
-	theta.v[0] = -p.C;
-	theta.v[1] = p.beta;
-	theta.v[2] = fc*(p.A - (p.alpha)*sin(p.gamma));
-	theta.v[3] = fc*(p.B + (p.alpha)*cos(p.gamma));
-	theta.v[4] = -(p.alpha)*sin(p.gamma)/fc;
-	theta.v[5] = (p.alpha)*cos(p.gamma)/fc;
-	return theta;
-}
-
 int main(int argc, char* argv[]) {
 
 	params P;
@@ -31,7 +19,6 @@ int main(int argc, char* argv[]) {
 	sscanf(argv[7], "%le", &fc);
 
 	vect theta = reverse_params_conversion(P, fc);
-
 	size s = image_size(argv[8]);
 			        
 	printf("P2\n%i %i\n65000\n", s.w, s.h);
@@ -43,5 +30,4 @@ int main(int argc, char* argv[]) {
 				        
 	return EXIT_SUCCESS;
 }
-
 

@@ -61,7 +61,6 @@ int main(int argc, char* argv[]) {
         strcpy(files[i-first], filename);
     }
     
-   
     // Estimation of the camera motion
   
     params* motion;
@@ -87,7 +86,7 @@ int main(int argc, char* argv[]) {
                 printf(".");
             for(j=(int) p;j<100;j++)
                 printf(" ");
-            printf("] %i % \n", (int) p);
+            printf("] %f % \n", p);
         
         } else {
 	    
