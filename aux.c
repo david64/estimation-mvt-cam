@@ -19,8 +19,10 @@ void comp_DFtheta (double** DF, double** u1, double** u2, float* f, float* g, do
 
 	int x,y;
 
-	for(x=MARGIN; x<s.h-MARGIN; x++) {
-		for(y=MARGIN; y<s.w-MARGIN; y++){
+    int m = margin(s);
+
+	for(x=m; x<s.h-m; x++) {
+		for(y=m; y<s.w-m; y++){
 
             double x_ = x + u1[x][y];
 			double y_ = y + u2[x][y];
@@ -50,9 +52,12 @@ void comp_grad(double** dgdx, double** dgdy, float* g, size s) {
 void comp_utheta(double** u1, double** u2, vect theta, size s) {
 
 	int x,y;
-	for (x = MARGIN ; x < s.h-MARGIN ; x++) {
+
+    int m = margin(s);
+
+	for (x = m ; x < s.h-m ; x++) {
 	
-		for (y = MARGIN ; y < s.w-MARGIN ; y++){ 
+		for (y = m ; y < s.w-m ; y++){ 
 		
 			u1[x][y] = theta.v[2] + theta.v[0]*(x-s.h/2) + theta.v[1]*(y-s.w/2) + theta.v[4]*(x-s.h/2)*(x-s.h/2) + theta.v[5]*(x-s.h/2)*(y-s.w/2);
 			u2[x][y] = theta.v[3] - theta.v[1]*(x-s.h/2) + theta.v[0]*(y-s.w/2) + theta.v[4]*(x-s.h/2)*(y-s.w/2) + theta.v[5]*(y-s.w/2)*(y-s.w/2);
@@ -157,6 +162,12 @@ size image_size(char* file) {
     s.h = (int) nx;
     s.w = (int) ny;
     return s;
+}
+
+int margin(size s) {
+
+    if (s.h>s.w) return s.w/5;
+    else         return s.h/5;
 }
 
 

@@ -10,7 +10,6 @@
 #include "matrix.h"
 
 #define N 100		
-#define MARGIN 50 	
 
 // Parameters of a camera motion
 typedef struct
@@ -68,6 +67,9 @@ float get_pixel(float* img, int i, int j, size s);
 
 // Set the pixel (i,j) of an image
 void set_pixel(float* img, int i, int j, size s, float p);
+
+// Return a margin adapted to the size of the image 
+int margin(size s);
 
 #endif
 

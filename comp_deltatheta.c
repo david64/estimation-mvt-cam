@@ -121,9 +121,11 @@ mat mat_quad_form(size s, double** DF, double** dgdx, double** dgdy, double** u1
 		for(j=0;j<7;j++)
 			U.m[i][j] = 0.0;
 	}	
-	
-	for(x=MARGIN; x<s.h-MARGIN; x++) {
-		for(y=MARGIN; y<s.w-MARGIN; y++){
+
+    int m = margin(s);
+
+	for(x=m; x<s.h-m; x++) {
+		for(y=m; y<s.w-m; y++){
 			
 			double x_ = x + u1[x][y];
 			double y_ = y + u2[x][y];
@@ -156,8 +158,10 @@ vect vect_lin_form(size s,  double** DF, double** dgdx, double** dgdy, double** 
 	for(i=0;i<7;i++)
 		B.v[i] = 0.0;
 
-	for(x=MARGIN; x<s.h-MARGIN; x++){
-		for(y=MARGIN; y<s.w-MARGIN; y++) {
+    int m = margin(s);
+
+	for(x=m; x<s.h-m; x++){
+		for(y=m; y<s.w-m; y++) {
 			
 			double x_ = x + u1[x][y];
 			double y_ = y + u2[x][y];

@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
    int fc = 1;
    sscanf(argv[3], "%i", &fc);
    
-   vect vp = least_squares_params(s.h, s.w, u1, u2);
+   vect vp = least_squares_params(s, u1, u2);
    params P = params_conversion(vp, fc);
 
    printf("%le %le %le %le %le %le", P.gamma, P.alpha, P.beta, P.A, P.B, P.C);

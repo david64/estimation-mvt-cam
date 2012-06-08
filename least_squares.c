@@ -2,11 +2,12 @@
 /* least_squares.c */
 
 #include "least_squares.h"
+#include "motion_params;h"
 #include <stdio.h>
 #include <math.h>
 
 /* Compute the matrix of the quadratic form associated to the least squares problem that we have to solve */
-mat least_squares_quad_form(int size_x, int size_y) {
+mat least_squares_quad_form(size s) {
 
 	mat Q;
 	Q.rows = 6;
@@ -23,12 +24,13 @@ mat least_squares_quad_form(int size_x, int size_y) {
     e.size = 6;
     f.size = 6;
 
+    int m = margin(s);
 
-	for(x = MARGIN; x<size_x-MARGIN; x++){
-        for(y = MARGIN; y<size_y-MARGIN; y++) {
+	for(x = m; x<s.h-m; x++){
+        for(y = m; y<s.w-m; y++) {
 
-            int x_ = x - size_x/2;
-            int y_ = y - size_y/2;
+            int x_ = x - s.h/2;
+            int y_ = y - s.w/2;
 
             e.v[0] = x_;
             e.v[1] = y_;
@@ -56,7 +58,7 @@ mat least_squares_quad_form(int size_x, int size_y) {
 }
 
 /* Compute the vector of the linear form associated to the least squares problem that we have to solve */
-vect least_squares_lin(int size_x, int size_y, double** flow_x, double** flow_y) {
+vect least_squares_lin(size s, double** flow_x, double** flow_y) {
 
 	vect l;
 	l.size = 6;
@@ -66,14 +68,16 @@ vect least_squares_lin(int size_x, int size_y, double** flow_x, double** flow_y)
 	for(i=0;i<6;i++)
 		l.v[i] = 0.0;
 
-	for(x=MARGIN;x<size_x-MARGIN;x++){
-		for(y=MARGIN;y<size_y-MARGIN; y++) {
+    int m = margin(s);
+
+	for(x=m;x<s.h-m;x++){
+		for(y=m;y<s.w-m; y++) {
 
 			double a = flow_x[x][y];
 			double b = flow_y[x][y];
 
-            int x_ = x - size_x/2;
-            int y_ = y - size_y/2;
+            int x_ = x - s.h/2;
+            int y_ = y - s.w/2;
 
 		  	l.v[0] +=  (a*x_ + b*y_);
 			l.v[1] +=  (a*y_ - b*x_);
@@ -91,10 +95,10 @@ vect least_squares_lin(int size_x, int size_y, double** flow_x, double** flow_y)
 }
 
 // Compute an approximation of the motion parameters using the optical flow
-vect least_squares_params(int size_x, int size_y, double** flow_x, double** flow_y){
+vect least_squares_params(size s, double** flow_x, double** flow_y){
 
-	mat U = least_squares_quad_form(size_x, size_y);
-	vect B = least_squares_lin(size_x, size_y, flow_x, flow_y);
+	mat U = least_squares_quad_form(s);
+	vect B = least_squares_lin(s, flow_x, flow_y);
         
 	mat L = cholesky(U);
 
