@@ -80,7 +80,7 @@ mat M_elem(double x, double y, double a, double b, double c) {
     M.m[5][5] += (2*b*c*x*y*y*y);
     M.m[5][6] += (b*x*y+c*y*y);
 
-	M.m[6][6] += 1.0;
+	M.m[6][6] += 1;
 	
 	for(i=0;i<7;i++) {
 		for(j=0;j<i;j++)
@@ -131,7 +131,7 @@ mat mat_quad_form(size s, double** DF, double** dgdx, double** dgdy, double** u1
 			double y_ = y + u2[x][y];
 
 			
-			if(-1<x_ && x_<s.h-1 && -1<y_ && y_<s.w-1) {
+			if(0<=x_ && x_<s.h-1 && 0<=y_ && y_<s.w-1) {
 
 				mat U_xy = M_elem(x-s.h/2,y-s.w/2,DF[x][y],px_interp(dgdx, x_, y_), px_interp(dgdy, x_,y_));
 
@@ -166,7 +166,7 @@ vect vect_lin_form(size s,  double** DF, double** dgdx, double** dgdy, double** 
 			double x_ = x + u1[x][y];
 			double y_ = y + u2[x][y];
 			
-			if(-1<x_ && x_<s.h-1 && -1<y_ && y_<s.w-1){
+			if(0<=x_ && x_<s.h-1 && 0<=y_ && y_<s.w-1){
 			
 				vect B_xy = V_elem(x-s.h/2,y-s.w/2,DF[x][y],px_interp(dgdx, x_, y_), px_interp(dgdy, x_, y_));
 			
