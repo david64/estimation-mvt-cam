@@ -7,15 +7,16 @@
 #define LEAST_SQUARES
 
 #include "matrix.h"
+#include "motion_params.h"
 
 // Quadratic form of the least squares method
-mat least_squares_quad_form(int size_x, int size_y); 
+mat least_squares_quad_form(size s); 
 
 // Linear form of the least squares method
-vect least_squares_lin(int size_x, int size_y, double** flow_x, double** flow_y); 
+vect least_squares_lin(size s, double** flow_x, double** flow_y); 
 
 // Final computation
-vect least_squares_params(int size_x, int size_y, double** flow_x, double** flow_y);
+vect least_squares_params(size s, double** flow_x, double** flow_y);
 
 
 #endif

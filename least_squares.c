@@ -2,7 +2,7 @@
 /* least_squares.c */
 
 #include "least_squares.h"
-#include "motion_params;h"
+#include "motion_params.h"
 #include <stdio.h>
 #include <math.h>
 
