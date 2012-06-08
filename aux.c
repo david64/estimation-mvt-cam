@@ -27,7 +27,7 @@ void comp_DFtheta (double** DF, double** u1, double** u2, float* f, float* g, do
             double x_ = x + u1[x][y];
 			double y_ = y + u2[x][y];
 			
-			if(-1<x_ && x_<s.h-1 && -1<y_ && y_<s.w-1)
+			if(0<=x_ && x_<s.h-1 && 0<=y_ && y_<s.w-1)
 				DF[x][y] = img_px_interp(g, x_, y_,s) - get_pixel(f,x,y,s) + xi;
 		}	
 	}
