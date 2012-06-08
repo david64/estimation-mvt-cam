@@ -24,8 +24,8 @@ mat least_squares_quad_form(int size_x, int size_y) {
     f.size = 6;
 
 
-	for(x = 0; x<size_x; x++){
-        for(y = 0; y<size_y; y++) {
+	for(x = MARGIN; x<size_x-MARGIN; x++){
+        for(y = MARGIN; y<size_y-MARGIN; y++) {
 
             int x_ = x - size_x/2;
             int y_ = y - size_y/2;
@@ -66,8 +66,8 @@ vect least_squares_lin(int size_x, int size_y, double** flow_x, double** flow_y)
 	for(i=0;i<6;i++)
 		l.v[i] = 0.0;
 
-	for(x=0;x<size_x;x++){
-		for(y=0;y<size_y; y++) {
+	for(x=MARGIN;x<size_x-MARGIN;x++){
+		for(y=MARGIN;y<size_y-MARGIN; y++) {
 
 			double a = flow_x[x][y];
 			double b = flow_y[x][y];
