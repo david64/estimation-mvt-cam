@@ -8,10 +8,6 @@
 
 #include "matrix.h"
 
-#ifndef MARGIN
-    #define MARGIN 50
-#endif
-
 // Quadratic form of the least squares method
 mat least_squares_quad_form(int size_x, int size_y); 
 
