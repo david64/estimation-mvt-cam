@@ -23,22 +23,22 @@ mat M_elem(double x, double y, double a, double b, double c) {
 
 	for(i=0;i<7;i++) {
 		for(j=0;j<7;j++)
-			M.m[i][j] = 0;
+			M.m[i][j] = 0.0;
 	}
 
 	double e1[6], e2[6];
 
 	e1[0] = x;
 	e1[1] = y;
-	e1[2] = 1;
-	e1[3] = 0;
+	e1[2] = 1.0;
+	e1[3] = 0.0;
 	e1[4] = x*x;
 	e1[5] = x*y;
 
 	e2[0] = y;
 	e2[1] = -x;
-	e2[2] = 0;
-	e2[3] = 1;
+	e2[2] = 0.0;
+	e2[3] = 1.0;
 	e2[4] = x*y;
 	e2[5] = y*y;
 
@@ -80,7 +80,7 @@ mat M_elem(double x, double y, double a, double b, double c) {
     M.m[5][5] += (2*b*c*x*y*y*y);
     M.m[5][6] += (b*x*y+c*y*y);
 
-	M.m[6][6] += 1;
+	M.m[6][6] += 1.0;
 	
 	for(i=0;i<7;i++) {
 		for(j=0;j<i;j++)
