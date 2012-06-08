@@ -166,8 +166,16 @@ size image_size(char* file) {
 
 int margin(size s) {
 
-    if (s.h>s.w) return s.w/5;
-    else         return s.h/5;
+    if (s.h>s.w) {
+	   if(s.w/5 % 2)
+	   	return s.w/5 + 1;
+	   else
+		return s.w/5;
+    } else {	   
+	   if(s.h/5 % 2)
+	   	return s.h/5 + 1;
+	   else
+		return s.h/5;
+   }
 }
-
 
