@@ -10,7 +10,7 @@
 
 
 #ifndef M_PI
-	#define M_PI 3.14
+	#define M_PI 3.14159
 #endif
 
 
@@ -165,7 +165,7 @@ size image_size(char* file) {
 }
 
 int margin(size s) {
-/*
+
     if (s.h>s.w) {
 	   if(s.w/10 % 2)
 	   	return s.w/10 + 1;
@@ -177,7 +177,7 @@ int margin(size s) {
 	   else
 		return s.h/10;
    }
-*/
-	return 50;
+
+//	return 49;
 }
 
