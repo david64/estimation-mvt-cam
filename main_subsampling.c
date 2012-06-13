@@ -45,12 +45,12 @@ int main(int argc, char* argv[]){
         }
 
         io_png_write_flt(argv[2], g, (size_t) s_g.w, (size_t) s_g.h, 1);
-        printf("%i", fc/2);     
+        printf("%le", fc/2);     
     }
     
     else {
         io_png_write_flt(argv[2], f, (size_t) s.w, (size_t) s.h, 1);
-        printf("%i", fc);
+        printf("%le", fc);
     }
     
     return EXIT_SUCCESS;
