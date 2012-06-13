@@ -7,6 +7,11 @@
 
 int main(int argc, char* argv[]) {
 
+    if(argc<4){
+	    printf("Not enough arguments !");
+            return 0;
+    }
+
     double fc = 1.0;
     sscanf(argv[3], "%lf", &fc);
 	

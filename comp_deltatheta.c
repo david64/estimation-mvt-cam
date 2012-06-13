@@ -109,7 +109,7 @@ vect V_elem(double x, double y, double a, double b, double c){
 }
 
 // Matrix of the quadratic form
-mat mat_quad_form(size s, double** DF, double** dgdx, double** dgdy, double** u1, double** u2) {
+mat mat_quad_form(size s, double** dgdx, double** dgdy, double** u1, double** u2) {
 
 	mat U;
 	U.rows = 7;
@@ -132,7 +132,7 @@ mat mat_quad_form(size s, double** DF, double** dgdx, double** dgdy, double** u1
 			
 			if(1<=x_ && x_<s.h-2 && 1<=y_ && y_<s.w-2) {
 
-				mat U_xy = M_elem(x-s.h/2,y-s.w/2,DF[x][y],px_interp(dgdx, x_, y_), px_interp(dgdy, x_,y_));
+				mat U_xy = M_elem(x-s.h/2,y-s.w/2,px_interp(dgdx, x_, y_), px_interp(dgdy, x_,y_));
 
 				for(i=0; i<7; i++) {
 					for(j=0; j<7; j++)
@@ -182,7 +182,7 @@ vect vect_lin_form(size s,  double** DF, double** dgdx, double** dgdy, double** 
 vect comp_deltatheta(double** DF, double** dgdx, double** dgdy, double** u1, double** u2, size s){
 
 
-	mat U = mat_quad_form(s,DF,dgdx,dgdy,u1,u2);
+	mat U = mat_quad_form(s,dgdx,dgdy,u1,u2);
 	vect B = vect_lin_form(s,DF,dgdx,dgdy,u1,u2);
 	mat L = cholesky(U);
 
