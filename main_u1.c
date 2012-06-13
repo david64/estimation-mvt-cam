@@ -6,9 +6,14 @@
 
 int main(int argc, char* argv[]) {
 
-	params P;
+    if(argc<9){
+	    printf("Not enough arguments !");
+            return 0;
+    }
 
-    sscanf(argv[1], "%le", &P.gamma);
+    params P;
+
+	sscanf(argv[1], "%le", &P.gamma);
 	sscanf(argv[2], "%le", &P.alpha);
 	sscanf(argv[3], "%le", &P.beta);
 	sscanf(argv[4], "%le", &P.A);

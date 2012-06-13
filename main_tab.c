@@ -4,6 +4,11 @@
 
 int main(int argc, char* argv[]) {
 
+	if(argc<7){
+		printf("Not enough arguments !");
+        	return 0;
+	}
+
     double theta, alpha, beta, A, B, C;
     sscanf(argv[1], "%lf", &theta);
     sscanf(argv[2], "%lf", &alpha);

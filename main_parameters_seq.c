@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
                 printf(".");
             for(j=(int) p;j<100;j++)
                 printf(" ");
-            printf("] %f % \n", p);
+            printf("] %f %% \n", p);
         
         } else {
 	    
