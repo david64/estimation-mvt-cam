@@ -13,7 +13,7 @@
 // Compute the elementary matrix in (x,y) of the quadratic form
 // a := DF_thetak
 // (b, c) := (grad g)(...)
-mat M_elem(double x, double y, double a, double b, double c) {
+mat M_elem(double x, double y, double b, double c) {
 
 	mat M;
 	M.rows = 7;
