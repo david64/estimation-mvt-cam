@@ -15,8 +15,8 @@ int main(int argc, char* argv[]) {
 		sscanf(argv[5], "%le", &P.B);
 		sscanf(argv[6], "%le", &P.C);
 		   
-	    double fc;
-	    sscanf(argv[7], "%le", &fc);
+	    double fc = 1.0;
+	    sscanf(argv[7], "%lf", &fc);
 
 	    vect theta = reverse_params_conversion(P, fc);
 

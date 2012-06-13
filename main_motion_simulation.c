@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "motion_params.h"
 
-void motion_simulation(char* file, char* out, params p, int fc); 
+void motion_simulation(char* file, char* out, params p, double fc); 
 
 int main(int argc, char* argv[]) {
 
@@ -20,8 +20,8 @@ int main(int argc, char* argv[]) {
 	sscanf(argv[7], "%le", &P.B);
 	sscanf(argv[8], "%le", &P.C);
 
-    int fc = 1;
-    sscanf(argv[9], "%i", &fc);
+    double fc = 1.0;
+    sscanf(argv[9], "%lf", &fc);
 
     motion_simulation(argv[1], argv[2], P, fc);
 

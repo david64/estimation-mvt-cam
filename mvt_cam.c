@@ -2,19 +2,19 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "cam_motion.h"
+#include "mvt_cam.h"
 #include <math.h>
 #include <string.h>
 
 
-void comp_cam_position(params* motion, cam_position* pos, int n, double fc) {
+void calc_pos_camera(params* mvt, pos_camera* pos, int n, int fc) {
 
     int i,j;
     
     mat R;
 
-    R.rows = 3;
-    R.columns = 3;
+    R.lignes = 3;
+    R.colonnes = 3;
 
     for(i=0; i<3; i++) {
         
@@ -27,14 +27,14 @@ void comp_cam_position(params* motion, cam_position* pos, int n, double fc) {
         }
     }
   
-    pos[0].center.size = 3;
-    pos[0].i.size = 3;
-    pos[0].j.size = 3;
-    pos[0].k.size = 3;
+    pos[0].centre.taille = 3;
+    pos[0].i.taille = 3;
+    pos[0].j.taille = 3;
+    pos[0].k.taille = 3;
 
-    pos[0].center.v[0] = 0;
-    pos[0].center.v[1] = 0;
-    pos[0].center.v[2] = 0;
+    pos[0].centre.v[0] = 0;
+    pos[0].centre.v[1] = 0;
+    pos[0].centre.v[2] = 0;
 
     pos[0].i.v[0] = 1;
     pos[0].i.v[1] = 0;
@@ -50,31 +50,30 @@ void comp_cam_position(params* motion, cam_position* pos, int n, double fc) {
     
     for(i=0; i<n-1; i++){
 
-        vect t; // This is the translation vector
-        t.size = 3;
-        t.v[0] = - motion[i].A * fc;
-        t.v[1] = - motion[i].B * fc;
-        t.v[2] = - motion[i].C * fc;
+        vect t;
+        t.taille = 3;
+        t.v[0] = - mvt[i].A * fc;
+        t.v[1] = - mvt[i].B * fc;
+        t.v[2] = - mvt[i].C * fc;
 
-        R = product_mm(R, mat_rot(motion[i]));
+        R = produit_mm(R, mat_rot(mvt[i]));
 
-        pos[i+1].i = product_mv(R, pos[0].i);
-        pos[i+1].j = product_mv(R, pos[0].j);
-        pos[i+1].k = product_mv(R, pos[0].k);
+        pos[i+1].i = produit_mv(R, pos[0].i);
+        pos[i+1].j = produit_mv(R, pos[0].j);
+        pos[i+1].k = produit_mv(R, pos[0].k);
         
-        pos[i+1].center = sum_vv(pos[i].center, product_mv(R, t)); 
+        pos[i+1].centre = somme_vv(pos[i].centre, produit_mv(R, t)); 
 
     }
 
 }
 
-// Compute the rotation matrix corresponding to motion m
 mat mat_rot(params m) {
 
     mat R;
 
-    R.rows = 3;
-    R.columns = 3;
+    R.lignes = 3;
+    R.colonnes = 3;
 
     R.m[0][0] = cos(m.beta) - (1-cos(m.alpha)) * sin(m.gamma) * sin(m.gamma - m. beta);
     R.m[0][1] = - sin(m.beta) + (1 - cos(m.alpha)) * sin(m.gamma) * cos(m.gamma - m.beta);
@@ -91,8 +90,10 @@ mat mat_rot(params m) {
     return R;
 }
 
-// Write the camera position at each instant in octave format in a file
-void octave_cam_motion(cam_position* pos, int n, char* fn) {
+
+// Ecrit la position de la camera a chaque instant dans un fichier exploitable
+// par Matlab
+void mvt_cam_matlab(pos_camera* pos, int n, char* fn) {
 
     char* s = malloc(sizeof(char)*4*500*n);
     s[0] = '\0';
@@ -191,7 +192,7 @@ void octave_cam_motion(cam_position* pos, int n, char* fn) {
     for(i=0; i<n; i++) {
         
         char x[15] = "";
-        sprintf(x, "%f", pos[i].center.v[0]);
+        sprintf(x, "%f", pos[i].centre.v[0]);
         strcat(s,x);
         strcat(s, " ");
     }
@@ -200,7 +201,7 @@ void octave_cam_motion(cam_position* pos, int n, char* fn) {
     for(i=0; i<n; i++) {
         
         char y[15] = "";
-        sprintf(y, "%f", pos[i].center.v[1]);
+        sprintf(y, "%f", pos[i].centre.v[1]);
         strcat(s,y);
         strcat(s, " ");
     }
@@ -209,7 +210,7 @@ void octave_cam_motion(cam_position* pos, int n, char* fn) {
     for(i=0; i<n; i++) {
         
         char z[15] = "";
-        sprintf(z, "%f", pos[i].center.v[2]);
+        sprintf(z, "%f", pos[i].centre.v[2]);
         strcat(s,z);
         strcat(s, " ");
     }

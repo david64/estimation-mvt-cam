@@ -14,7 +14,7 @@ typedef struct {
 } cam_position;
 
 // Compute the camera position at each instant in a n-step motion. Write the result in pos
-void comp_cam_position(params* mvt, cam_position* pos, int n, int fc);
+void comp_cam_position(params* mvt, cam_position* pos, int n, double fc);
 
 // Compute the rotation matrix of a motion
 mat mat_rot(params motion);

@@ -27,7 +27,7 @@ typedef struct
 float get_pixel(float* img, int i, int j, size s);
 
 // Compute the parameters of the motion f -> g
-params motion_params(char* file_f, char* file_g, int fc);
+params motion_params(char* file_f, char* file_g, double fc);
 
 // Compute grad(g). Write the result in (dgdx, dgdy).
 void comp_grad(double** dgdx, double** dgdy, float* g, size s); 
@@ -42,7 +42,7 @@ void comp_DFtheta(double** DF, double** u1, double** u2, float* f, float* g, dou
 vect comp_deltatheta(double** DF, double** dgdx, double** dgdy, double** u1, double** u2, size s);
 
 // Convert parameters (a1,a2,c1,c2,q1,q2,xi) into parameters (theta, alpha, beta, A, B, C)
-params params_conversion(vect, int fc);
+params params_conversion(vect, double fc);
 
 // Compute the weighted mean of pixels around non-integer coordinates
 double px_interp(double**, double, double);
@@ -57,7 +57,7 @@ float img_px_interp(float*, double, double, size);
 int stop_criterion(vect deltas[N], int i);
 
 // Convert parameters (theta, alpha, beta, A, B, C) into parameters (a1, a2, c1, c2, q1, q2)
-vect reverse_params_conversion(params p, int fc);
+vect reverse_params_conversion(params p, double fc);
 
 // Return the size of the png image "file"
 size image_size(char* file);

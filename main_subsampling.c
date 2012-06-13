@@ -18,8 +18,8 @@ int main(int argc, char* argv[]){
     s.h = (int) nx;
     s.w = (int) ny;
 
-   int fc = 1;
-   sscanf(argv[3], "%i", &fc);
+   double fc = 1.0;
+   sscanf(argv[3], "%lf", &fc);
    
    if(s.w > 400) {
 

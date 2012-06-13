@@ -29,8 +29,8 @@ int main(int argc, char* argv[]) {
    read_flow(u1, s, argv[1]);
    read_flow(u2, s, argv[2]);
 
-   int fc = 1;
-   sscanf(argv[3], "%i", &fc);
+   double fc = 1.0;
+   sscanf(argv[3], "%lf", &fc);
    
    vect vp = least_squares_params(s, u1, u2);
    params P = params_conversion(vp, fc);

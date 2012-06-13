@@ -11,7 +11,7 @@
 #include <string.h>
 #include <stdio.h>
 
-params motion_params(char* file_f, char* file_g, int fc) {
+params motion_params(char* file_f, char* file_g, double fc) {
 
 	double **DF, **dgdx, **dgdy, **u1, **u2;
     float *f, *g;

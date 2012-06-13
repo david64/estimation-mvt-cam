@@ -66,7 +66,7 @@ void comp_utheta(double** u1, double** u2, vect theta, size s) {
 }
 
 // Convert motion parameters (a1, a2, c1, c2, q1, q2, xi) into (gamma, beta, alpha, A, B, C)
-params params_conversion(vect theta, int fc) {
+params params_conversion(vect theta, double fc) {
 
 	// Recall : theta = (a_1, a_2, c_1, c_2, q_1, q_2, xi)
 	params p;
@@ -141,7 +141,7 @@ float get_pixel(float* img, int i, int j, size s) { return img[j + s.w*i]; }
 void set_pixel(float* img, int i, int j, size s, float p) { img[j + s.w*i] = p; }
 
 // Convert parameters (theta, alpha, beta, A, B, C) into parameters (a1, a2, c1, c2, q1, q2)
-vect reverse_params_conversion(params p, int fc) {
+vect reverse_params_conversion(params p, double fc) {
 
 	vect theta;
 	theta.v[0] = -p.C;

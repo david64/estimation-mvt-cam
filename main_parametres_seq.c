@@ -2,17 +2,17 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "motion_params.h"
+#include "params_mvt.h"
 #include <string.h>
 #include <math.h>
-#include "cam_motion.h"
+#include "mvt_cam.h"
 
 
 int main(int argc, char* argv[]) {
 
 	if(argc<6) {
-		printf("Not enough arguments !\n");
-		return 1;
+		printf("Pas assez d'arguments !\n");
+		return 0;
 	}
 
 
@@ -30,9 +30,11 @@ int main(int argc, char* argv[]) {
     int n = last-first+1;
 
     printf("\033[2J\033[0;0H");
-    printf("Estimation of the camera motion in the sequence stored in %s\n", dir);
+    printf("Estimation du mouvement de la camera dans la sequence stockee dans ");
+    printf(dir);
+    printf("\n");
     
-    // Creation of the file list
+    // Creation de la liste des fichiers
     
     char** files;
     files = malloc(n*sizeof(char*));
@@ -61,65 +63,71 @@ int main(int argc, char* argv[]) {
         strcpy(files[i-first], filename);
     }
     
-    // Estimation of the camera motion
+   
+    // Estimation du mouvement de la camera
   
-    params* motion;
+    params* mvt;
 
-    motion = malloc(sizeof(params) * (n-1));
+    mvt = malloc(sizeof(params) * (n-1));
 
-    double fc = 1.0;
-    sscanf(argv[5], "%lf", &fc);
+    int fc = 1;
+    sscanf(argv[5], "%i", &fc);
 
     float freq = 100.0/(n-1);
     float p = 0;
 
     for(i=0; i<n-1; i++) {
 
-        motion[i] = motion_params(files[i], files[i+1], fc);	
+        mvt[i] = param_mvt(files[i], files[i+1], fc);	
         
         if(argc==7) {
             
             p = p + freq;
             printf("\033[2J\033[0;0H");
-            printf("Estimation of the camera motion in the sequence stored in %s\n Progression : [", dir);
+            printf("Estimation du mouvement de la camera dans la sequence stockee dans ");
+            printf(dir);
+            printf("\n");
+            printf("Progression : [");
             for(j=0;j<(int) p;j++)
                 printf(".");
             for(j=(int) p;j<100;j++)
                 printf(" ");
-            printf("] %f % \n", p);
+            printf("] ");
+            printf("%i % \n", (int) p);
         
         } else {
 	    
-            printf("Parameters of the motion %s -> %s : \n", files[i], files[i+1]);
-            printf("theta=%le ; alpha=%le ; beta=%le ; A=%le ; B=%le ; C=%le \n", motion[i].gamma, motion[i].alpha, motion[i].beta, motion[i].A, motion[i].B, motion[i].C);
+            printf("Parametres du mouvement pour %s -> %s : \n", files[i], files[i+1]);
+            printf("theta=%le ; alpha=%le ; beta=%le ; A=%le ; B=%le ; C=%le \n", mvt[i].gamma, mvt[i].alpha, mvt[i].beta, mvt[i].A, mvt[i].B, mvt[i].C);
         }
 
     }
 
-    // Compute the camera position for octave displaying
+    // Calcul eventuel de la position de la camera pour affichage sous Matlab
 
     if(argc==7){
    
-        cam_position* pos = malloc(sizeof(cam_position)*n);
+        pos_camera* pos = malloc(sizeof(pos_camera)*n);
 
-        comp_cam_position(motion, pos, n, fc);
-        octave_cam_motion(pos, n, argv[6]);
+        calc_pos_camera(mvt, pos, n, fc);
+        mvt_cam_matlab(pos, n, argv[6]);
 
         free(pos);
 
-        printf("Matrices describing the camera position for use in octave written in ");
+        printf("Matrices decrivant la positition de la camera pour exploitation dans matlab ecrites dans ");
         printf(argv[6]);
         printf("\n");
     }
 
-    free(motion);
+    free(mvt);
 
-    // Deallocation of the file list
+    // Desallocation de la liste des fichiers
     for(i=0; i<n; i++)
         free(files[i]);
 
     free(files);
 
-    return EXIT_SUCCESS;
+    return 0;
 }
+
 

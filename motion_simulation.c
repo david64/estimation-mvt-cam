@@ -5,7 +5,7 @@
 #include "io_png.h"
 
 
-void motion_simulation(char* file, char* out, params p, int fc) {
+void motion_simulation(char* file, char* out, params p, double fc) {
 
 	size s = image_size(file);
 

@@ -1,44 +1,46 @@
 
 
-/* comp_deltatheta.c */
+/* calc_deltatheta.c */
 
 
-#include "motion_params.h"
-#include "matrix.h"
+#include "params_mvt.h"
+#include "matrices.h"
 #include <math.h>
 
 
-// Computation of the matrices of the quadratic form and of the linear form associated to the minimization during the k-th iteration
+// Calcul des matrices de la forme quadratique et de la forme lineaire
+// associees a la minimisation lors de la k-ieme iteration
 
-// Compute the elementary matrix in (x,y) of the quadratic form
+// Calcule la matrice elementaire en (x,y) de la forme quadratique
+// associee a la minimisation lors de la k-ieme iteration
 // a := DF_thetak
 // (b, c) := (grad g)(...)
 mat M_elem(double x, double y, double a, double b, double c) {
 
 	mat M;
-	M.rows = 7;
-	M.columns = 7;
+	M.lignes = 7;
+	M.colonnes = 7;
 
 	int i,j;
 
 	for(i=0;i<7;i++) {
 		for(j=0;j<7;j++)
-			M.m[i][j] = 0.0;
+			M.m[i][j] = 0;
 	}
 
 	double e1[6], e2[6];
 
 	e1[0] = x;
 	e1[1] = y;
-	e1[2] = 1.0;
-	e1[3] = 0.0;
+	e1[2] = 1;
+	e1[3] = 0;
 	e1[4] = x*x;
 	e1[5] = x*y;
 
 	e2[0] = y;
 	e2[1] = -x;
-	e2[2] = 0.0;
-	e2[3] = 1.0;
+	e2[2] = 0;
+	e2[3] = 1;
 	e2[4] = x*y;
 	e2[5] = y*y;
 
@@ -91,11 +93,13 @@ mat M_elem(double x, double y, double a, double b, double c) {
 }
 
 
-// Compute the elementary vector in (x,y) of the quadratic form
+// Calcule le vecteur associe a la forme quadratique elementaire
+// en (x,y), associee a la minimisation lors de la k-ieme
+// iteration
 vect V_elem(double x, double y, double a, double b, double c){
 
 	vect V;
-	V.size = 7;
+	V.taille = 7;
 
 	V.v[0] = 2*a*(b*x+c*y);
 	V.v[1] = 2*a*(-c*x+b*y);
@@ -108,12 +112,13 @@ vect V_elem(double x, double y, double a, double b, double c){
 	return V;
 }
 
-// Matrix of the quadratic form
-mat mat_quad_form(size s, double** DF, double** dgdx, double** dgdy, double** u1, double** u2) {
+// matrice de la forme quadratique associee a la minimisation lors de la k-ième
+// iteration.
+mat mat_forme_q(taille t, double** DF, double** dgdx, double** dgdy, double** u1, double** u2) {
 
 	mat U;
-	U.rows = 7;
-	U.columns = 7;
+	U.lignes = 7;
+	U.colonnes = 7;
 
 	int x,y,i,j;
 
@@ -121,18 +126,17 @@ mat mat_quad_form(size s, double** DF, double** dgdx, double** dgdy, double** u1
 		for(j=0;j<7;j++)
 			U.m[i][j] = 0.0;
 	}	
-
-    int m = margin(s);
-
-	for(x=m; x<s.h-m; x++) {
-		for(y=m; y<s.w-m; y++){
+	
+	for(x=MARGE; x<t.h-MARGE; x++) {
+		for(y=MARGE; y<t.l-MARGE; y++){
 			
 			double x_ = x + u1[x][y];
 			double y_ = y + u2[x][y];
-			
-			if(1<=x_ && x_<s.h-2 && 1<=y_ && y_<s.w-2) {
 
-				mat U_xy = M_elem(x-s.h/2,y-s.w/2,DF[x][y],px_interp(dgdx, x_, y_), px_interp(dgdy, x_,y_));
+			
+			if(-1<x_ && x_<t.h-1 && -1<y_ && y_<t.l-1) {
+
+				mat U_xy = M_elem(x-t.h/2,y-t.l/2,DF[x][y],interp_pixel(dgdx, x_, y_), interp_pixel(dgdy, x_,y_));
 
 				for(i=0; i<7; i++) {
 					for(j=0; j<7; j++)
@@ -146,51 +150,51 @@ mat mat_quad_form(size s, double** DF, double** dgdx, double** dgdy, double** u1
 }
 
 
-// Vector of the linear form
-vect vect_lin_form(size s,  double** DF, double** dgdx, double** dgdy, double** u1, double** u2) {
+// vecteur associe a la forme lineaire associee a la minimisation lors de la k-ieme
+// iteration.
+vect vect_forme_lin(taille t,  double** DF, double** dgdx, double** dgdy, double** u1, double** u2) {
 
 	vect B;
-	B.size = 7;
+	B.taille = 7;
 
 	int x,y,i;
 	
 	for(i=0;i<7;i++)
 		B.v[i] = 0.0;
 
-    int m = margin(s);
-
-	for(x=m; x<s.h-m; x++){
-		for(y=m; y<s.w-m; y++) {
+	for(x=MARGE; x<t.h-MARGE; x++){
+		for(y=MARGE; y<t.l-MARGE; y++) {
 			
 			double x_ = x + u1[x][y];
 			double y_ = y + u2[x][y];
 			
-			if(1<=x_ && x_<s.h-2 && 1<=y_ && y_<s.w-2){
+			if(-1<x_ && x_<t.h-1 && -1<y_ && y_<t.l-1){
 			
-				vect B_xy = V_elem(x-s.h/2,y-s.w/2,DF[x][y],px_interp(dgdx, x_, y_), px_interp(dgdy, x_, y_));
+				vect B_xy = V_elem(x-t.h/2,y-t.l/2,DF[x][y],interp_pixel(dgdx, x_, y_), interp_pixel(dgdy, x_, y_));
 			
 				for(i=0; i<7; i++)
 					B.v[i] += B_xy.v[i];
 			}
+		
 		}
 	}
 
 	return B;
 }
 
-// Compute deltatheta which minimizes sum(1/2*w(x,y)*(r_deltatheta(x,y)^2))
-vect comp_deltatheta(double** DF, double** dgdx, double** dgdy, double** u1, double** u2, size s){
+// calcule deltatheta minimisant somme(1/2*w(x,y)*(r_deltatheta(x,y)^2))
+vect calc_deltatheta(double** DF, double** dgdx, double** dgdy, double** u1, double** u2, taille t){
 
 
-	mat U = mat_quad_form(s,DF,dgdx,dgdy,u1,u2);
-	vect B = vect_lin_form(s,DF,dgdx,dgdy,u1,u2);
+	mat U = mat_forme_q(t,DF,dgdx,dgdy,u1,u2);
+	vect B = vect_forme_lin(t,DF,dgdx,dgdy,u1,u2);
 	mat L = cholesky(U);
 
 	int k;
 	for(k=0; k<7; k++)
 		B.v[k] *= -0.5;
 
-	return res_upper_tri(L, res_lower_tri(transpose(L), B)); 
+	return res_tri_sup(L, res_tri_inf(transpose(L), B)); 
 }
 
 
